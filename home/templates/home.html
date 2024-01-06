@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block main %}
+<br>
+<br>
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+
+        <h4>Why Are You ?</h4>
+
+        <br>
+        <br>
+
+        <a href="/donor/">
+            <button class="btn btn-primary">Donor</button>
+        </a>
+        
+        <a href="/ricipient/">
+            <button class="btn btn-dark" style="margin-left: 20px;">Recipient</button>
+        </a>
+
+        <a href="/hospital/">
+            <button class="btn btn-danger" style="margin-left: 20px;">Hospital</button>
+        </a>
+       
+    </div>
+    <div class="col-2"></div>
+</div>
+
+{% endblock %}

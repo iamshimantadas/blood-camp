@@ -1,0 +1,15 @@
+{% extends "base_donor.html" %}
+
+{% block sidebar %}
+
+<br>
+
+<title>Dashboard</title>
+  
+  <div class="content">
+    <h2>Account Summary</h2>
+    <br>
+    {% if not status %} <h3>Account Status:  <font style="color: red;">Inactive! [Waiting for admin approval]</font>  </h3> {% endif %}
+  </div>
+
+{% endblock %}

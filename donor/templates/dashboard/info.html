@@ -1,0 +1,60 @@
+{% extends "base_donor.html" %}
+
+{% block sidebar %}
+
+<div class="content">
+    <h2>Account Details</h2>
+    <br>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" value="{{data.first_name}}" name="first_name" id="first_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" value="{{data.last_name}}" name="last_name" id="last_name" required>
+          </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" value="{{data.email}}" name="email" id="email" aria-describedby="enter email" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control"  name="password" id="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" value="{{data.phone}}" name="phone" id="phone" required>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <textarea class="form-control" name="address" id="address" rows="4" required>
+                {{data.address}}
+            </textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="blood_group">Select Blood Group</label>
+            <select name="blood_group" id="blood_group" class="form-select" aria-label="select blood group"
+            >
+                <option value="not sure" {% if data.blood_group == 'not sure' %} selected {% endif %}>Not Sure
+                </option>
+                <option value="A+" {% if data.blood_group == 'A+' %} selected {% endif %}>A+</option>
+                <option value="A-" {% if data.blood_group == 'A-' %} selected {% endif %}>A-</option>
+                <option value="B+" {% if data.blood_group ==  'B+' %} selected {% endif %}>B+</option>
+                <option value="B-" {% if data.blood_group == 'B-' %} selected {% endif %}>B-</option>
+                <option value="AB+" {% if data.blood_group == 'AB+' %} selected {% endif %}>AB+</option>
+                <option value="AB-" {% if data.blood_group == 'AB-' %} selected {% endif %}>AB-</option>
+                <option value="O+" {% if data.blood_group == 'O+' %} selected {% endif %}>O+</option>
+                <option value="O-" {% if data.blood_group == 'O-' %} selected {% endif %}>O-</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+  </div>
+
+
+
+{% endblock %}
