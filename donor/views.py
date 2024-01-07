@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from core.models import User
+from core.models import User, Bloodstock
 
 
 def RegisterView(request):
@@ -16,13 +16,15 @@ def RegisterView(request):
         address = data.get("address")
         bloodgrp = data.get("blood_group")
 
+        blood_obj = Bloodstock.objects.get(id=bloodgrp)
+
         user = User.objects.create(
             first_name=firstname,
             last_name=lastname,
             email=email,
             address=address,
             phone=phone,
-            blood_group = bloodgrp,
+            blood_group = blood_obj,
             status=False,
             is_donor=True,
         )
@@ -35,7 +37,9 @@ def RegisterView(request):
             print(e)
             return HttpResponse("error occured!")
     else:
-        return render(request, "register.html")
+        stock = Bloodstock.objects.all()
+        context = {"stock":stock}
+        return render(request, "register.html",context)
 
 
 def LoginView(request):

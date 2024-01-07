@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .manager import *
 
+class Bloodstock(models.Model):
+    blood_type = models.CharField(max_length=5)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.blood_type
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=15)
     last_name = models.CharField(max_length=15)
@@ -13,7 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_donor = models.BooleanField(default=False, null=True)
     is_receipient = models.BooleanField(default=False, null=True)
     is_hospital_stff = models.BooleanField(null=True,default=False)
-    blood_group = models.CharField(max_length=6,null=True)
+    blood_group = models.ForeignKey(Bloodstock, on_delete=models.CASCADE, null=True)
 
     is_manager = models.BooleanField(default=False, null=True)
     is_active = models.BooleanField(default=True)
@@ -29,6 +37,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
     
 
-class Bloodstock(models.Model):
-    blood_type = models.CharField(max_length=5)
-    quantity = models.IntegerField()
