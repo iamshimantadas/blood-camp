@@ -24,7 +24,7 @@
                 <th scope="col">PHONE</th>
                 <th scope="col">ADDRESS</th>
                 <th scope="col">EMAIL</th>
-                <th scope="col">BLOOD GROUP</th>
+                <!-- <th scope="col">BLOOD GROUP</th> -->
                 <th scope="col">APPROVED STATUS</th>
               </tr>
             </thead>
@@ -36,7 +36,7 @@
                 <td>{{x.phone}}</td>
                 <td>{{x.address}}</td>
                 <td>{{x.email}}</td>
-                <td>{{x.blood_group}}</td>
+                <!-- <td>{{x.blood_group}}</td> -->
                 <td> 
                   <form action="{% url 'approve_ricipient' %}" method="post">
                     {% csrf_token %}
