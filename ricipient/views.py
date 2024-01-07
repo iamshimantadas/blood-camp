@@ -14,7 +14,7 @@ def RegisterView(request):
         password = data.get("password")
         phone = data.get("phone")
         address = data.get("address")
-        bloodgrp = data.get("blood_group")
+        # bloodgrp = data.get("blood_group")
 
         user = User.objects.create(
             first_name=firstname,
@@ -22,7 +22,7 @@ def RegisterView(request):
             email=email,
             address=address,
             phone=phone,
-            blood_group = bloodgrp,
+            # blood_group = bloodgrp,
             status=False,
             is_receipient=True,
         )
