@@ -90,3 +90,5 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Bloodstock)
+admin.site.register(Order)
+admin.site.register(Blooddonation)

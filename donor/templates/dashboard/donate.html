@@ -1,0 +1,47 @@
+{% extends "base_donor.html" %}
+
+{% block sidebar %}
+
+<br>
+
+<title>Donate Us ~ Donor</title>
+  
+  <div class="content">
+    <h2>Donate Blood Form Page</h2>
+    <br>
+    
+
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="userid" value="{{userid}}" required>
+                <!-- Blood Donation Date -->
+                <div class="mb-3">
+                    <label for="bloodDonationDate" class="form-label">Blood Donation Date</label>
+                    <input type="date" class="form-control" id="bloodDonationDate" name="bloodDonationDate" required>
+                </div>
+    
+                <!-- Donation Time -->
+                <div class="mb-3">
+                    <label for="donationTime" class="form-label">Donation Time</label>
+                    <input type="time" class="form-control" id="donationTime" name="donationTime" required>
+                </div>
+    
+                <!-- Any Disease/Body Symptom -->
+                <div class="mb-3">
+                    <label for="bodySymptom" class="form-label">Any Disease/Body Symptom</label>
+                    <textarea class="form-control" id="bodySymptom" name="bodySymptom" rows="4"></textarea>
+                </div>
+    
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-1"></div>
+    </div>
+    
+
+  </div>
+
+{% endblock %}

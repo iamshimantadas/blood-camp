@@ -10,6 +10,10 @@
     <h2>Account Summary</h2>
     <br>
     {% if not status %} <h3>Account Status:  <font style="color: red;">Inactive! [Waiting for admin approval]</font>  </h3> {% endif %}
+  <br>
+  {% if blood_group %} <h3> <font style="color: red;">{{blood_group}} Out Of Stock!</font> Blood Required! 
+    <a href="{% url 'd_donate_blood' %}">Please Donate!</a>
+     </h3> {% endif %}
   </div>
 
 {% endblock %}

@@ -7,4 +7,5 @@ urlpatterns = [
     path("d_dashboard/",DashboardView,name="d_dashboard"),
     path("d_info/",InfoView,name="d_info"),
     path("d_logout/",LogoutView,name="d_logout"),
+    path("donate_blood/",DonateBloodView,name="d_donate_blood"),
 ]

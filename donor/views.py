@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from core.models import User, Bloodstock
+from core.models import User, Bloodstock, Blooddonation
 
 
 def RegisterView(request):
@@ -74,13 +74,33 @@ def LoginView(request):
 def DashboardView(request):
     user = request.user
     if user.is_authenticated:
-        # acc_status = user.status
-        # context = {"status": acc_status}
-        # return render(request, "dashboard/dashboard.html", context)
             if user.is_donor:
                 acc_status = user.status
-                context = {"status": acc_status}
-                return render(request, "dashboard/dashboard.html", context)
+                try:
+                    stock = Bloodstock.objects.get(quantity=0)
+                    user_obj = User.objects.get(id=request.user.id)
+                    donation = Blooddonation.objects.filter(donate_userid=user_obj).exists()
+                    # print("donation: ",donation)
+                    if donation:
+                        stock=None
+                        if stock==user.blood_group:
+                            context = {"status": acc_status,"blood_group":user.blood_group}
+                            return render(request, "dashboard/dashboard.html", context)
+                        else:
+                            context = {"status": acc_status}
+                            return render(request, "dashboard/dashboard.html", context)
+                    else:
+                        if stock==user.blood_group:
+                            context = {"status": acc_status,"blood_group":user.blood_group}
+                            return render(request, "dashboard/dashboard.html", context)
+                        else:
+                            context = {"status": acc_status}
+                            return render(request, "dashboard/dashboard.html", context)
+                
+                except Exception as e:
+                    print(e)    
+                    context = {"status": acc_status}
+                    return render(request, "dashboard/dashboard.html", context)
             else:
                 return render(request, "login.html")
     else:
@@ -170,6 +190,46 @@ def LogoutView(request):
         if user.is_donor:
             logout(request)
             return redirect("/donor/d_login/")
+        else:
+            return HttpResponse("you are a donor!")
+    else:
+        return redirect("/donor/d_login/")
+
+
+def DonateBloodView(request):
+    user = request.user
+    if request.user.is_authenticated:
+        if user.is_donor:
+            if request.method == "POST":
+                data = request.POST
+
+                userid = data.get("userid")
+                userid = int(userid)
+                user_obj = User.objects.get(id=userid)
+                symptom = data.get("bodySymptom")
+                
+                try:
+                    donate = Blooddonation.objects.create(
+                    donate_userid = user_obj,
+                    donate_date = data.get("bloodDonationDate"),
+                    donate_time = data.get("donationTime"),
+                    )
+                    if symptom:
+                        donate.disease = symptom
+                        donate.save()
+                        return redirect("/donor/d_login/")
+                    else:
+                        donate.disease = None
+                        donate.save()
+                        return redirect("/donor/d_login/")
+                    
+                    
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("error occured!")
+            else:
+                context = {"userid":request.user.id}
+                return render(request,"dashboard/donate.html",context)
         else:
             return HttpResponse("you are a donor!")
     else:

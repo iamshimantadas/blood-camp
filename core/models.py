@@ -53,3 +53,10 @@ class Order(models.Model):
     delivertime = models.CharField(max_length=10)
     deliverymode = models.CharField(max_length=100)
     status = models.BooleanField(default=False) 
+
+
+class Blooddonation(models.Model):
+    donate_userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    donate_date = models.DateField()
+    donate_time = models.CharField(max_length=10)
+    disease = models.TextField(null=True)
