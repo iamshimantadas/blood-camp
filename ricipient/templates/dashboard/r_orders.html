@@ -22,6 +22,8 @@
                     <th scope="col">EMAIL</th>
                     <th scope="col">ORDER ADDRES</th>
                     <th scope="col">ORDER MODE</th>
+                    <th scope="col">BLOOD GROUP</th>
+                    <th scope="col">QUANTITY</th>
                     <th scope="col">STATUS</th>
                   </tr>
                 </thead>
@@ -34,6 +36,8 @@
                     <td>{{x.email}}</td>
                     <td>{{x.address}}</td>
                     <td>{{x.deliverymode}}</td>
+                    <td>{{x.bloodgroup}}</td>
+                    <td>{{x.quantity}}</td>
                     <td>
                     {% if not x.status %}  <font style="color: rgb(39, 1, 39);"><b>Waiting for Approval</b></font> {% endif %}
                     {% if x.status %}   <font style="color: green;"><b>Granted</b></font> {% endif %}

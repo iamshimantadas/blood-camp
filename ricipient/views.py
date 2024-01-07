@@ -174,26 +174,68 @@ def AddNewBloodRequestView(request):
             if request.user.status:
                 blood = data.get('blood_group')
                 try:
-                    bloodgrpid = Bloodstock.objects.get(id=blood)
-                    order = Order(
-                        userid = User.objects.get(id=request.user.id),
-                        name=data.get('full_name'),
-                        email=data.get('email'),
-                        age=data.get('age'),
-                        bloodgroup=bloodgrpid,  # Assuming 'blood_group' is the ID of the selected blood group
-                        quantity=data.get('quantity'),
-                        address=data.get('address'),
-                        idproff=data.get('government_id'),
-                        idtype=data.get('profession_type'),
-                        contactno=data.get('contact_number'),
-                        emer_contactno=data.get('emergency_contact'),
-                        deliverdate=data.get('delivery_date'),
-                        delivertime=data.get('delivery_time'),
-                        deliverymode=data.get('delivery_mode'),
-                        status=False,
-                    )
-                    order.save()
-                    return redirect("/ricipient/r_trackallreq/")
+                    stock = Bloodstock.objects.get(id=blood)
+                    quan = data.get('quantity')
+                    quan = int(quan)
+                    quan2 = int(stock.quantity)
+                    # print(quan)
+                    # print(quan2)
+
+                    if not quan < quan2:
+                        try:
+                            bloodgrpid = Bloodstock.objects.get(id=blood)
+                            order = Order(
+                                userid = User.objects.get(id=request.user.id),
+                                name=data.get('full_name'),
+                                email=data.get('email'),
+                                age=data.get('age'),
+                                bloodgroup=bloodgrpid,  # Assuming 'blood_group' is the ID of the selected blood group
+                                quantity=data.get('quantity'),
+                                address=data.get('address'),
+                                idproff=data.get('government_id'),
+                                idtype=data.get('profession_type'),
+                                contactno=data.get('contact_number'),
+                                emer_contactno=data.get('emergency_contact'),
+                                deliverdate=data.get('delivery_date'),
+                                delivertime=data.get('delivery_time'),
+                                deliverymode=data.get('delivery_mode'),
+                                status=False,
+                            )
+                            order.save()
+                            # return redirect("/ricipient/r_trackallreq/")
+                            return HttpResponse(''' 
+                            Current This Blood Group Out Of Stock From Us.But We have registered your request to us.
+                                                We will inform you if stock will available! <a href='/ricipient/r_login/'>click here</a>
+                            ''')
+                        except Exception as e:
+                            print(e)
+                            return HttpResponse("error occured!")
+                    else:
+                        try:
+                            bloodgrpid = Bloodstock.objects.get(id=blood)
+                            order = Order(
+                                userid = User.objects.get(id=request.user.id),
+                                name=data.get('full_name'),
+                                email=data.get('email'),
+                                age=data.get('age'),
+                                bloodgroup=bloodgrpid,  # Assuming 'blood_group' is the ID of the selected blood group
+                                quantity=data.get('quantity'),
+                                address=data.get('address'),
+                                idproff=data.get('government_id'),
+                                idtype=data.get('profession_type'),
+                                contactno=data.get('contact_number'),
+                                emer_contactno=data.get('emergency_contact'),
+                                deliverdate=data.get('delivery_date'),
+                                delivertime=data.get('delivery_time'),
+                                deliverymode=data.get('delivery_mode'),
+                                status=False,
+                            )
+                            order.save()
+                            return redirect("/ricipient/r_trackallreq/")
+                        except Exception as e:
+                            print(e)
+                            return HttpResponse("error occured!")
+                    
                 except Exception as e:
                     print(e)
                     return HttpResponse("error occured!")
