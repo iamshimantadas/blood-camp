@@ -53,7 +53,7 @@ def LoginView(request):
         if auth:
             if phone == user.phone:
                 login(request, user)
-                return redirect("/donor/dashboard/")
+                return redirect("dashboard/")
             else:
                 return HttpResponse("phone number not match! Please enter correct one!")
         else:
@@ -74,9 +74,15 @@ def LoginView(request):
 def DashboardView(request):
     user = request.user
     if user.is_authenticated:
-        acc_status = user.status
-        context = {"status": acc_status}
-        return render(request, "dashboard/dashboard.html", context)
+        # acc_status = user.status
+        # context = {"status": acc_status}
+        # return render(request, "dashboard/dashboard.html", context)
+            if user.is_donor:
+                acc_status = user.status
+                context = {"status": acc_status}
+                return render(request, "dashboard/dashboard.html", context)
+            else:
+                return render(request, "login.html")
     else:
         return redirect("/donor/login/")
 
@@ -142,17 +148,24 @@ def InfoView(request):
     else:
         user = request.user
         if user.is_authenticated:
-            user_obj = User.objects.get(email=user.email)
-            print(user_obj)
-            context = {"data": user_obj}
-            return render(request, "dashboard/info.html", context)
+            if user.is_donor:
+                user_obj = User.objects.get(email=user.email)
+                print(user_obj)
+                context = {"data": user_obj}
+                return render(request, "dashboard/info.html", context)
+            else:
+                return HttpResponse("bad request")
         else:
             return redirect("/login/")
 
 
 def LogoutView(request):
+    user = request.user
     if request.user.is_authenticated:
-        logout(request)
-        return redirect("/")
+        if user.is_donor:
+            logout(request)
+            return redirect("/")
+        else:
+            return HttpResponse("you are a donor!")
     else:
         return redirect("/login/")

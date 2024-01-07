@@ -37,3 +37,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
     
 
+class Order(models.Model):
+    userid = models.ForeignKey(User,on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    age = models.IntegerField()
+    bloodgroup = models.ForeignKey(Bloodstock, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    address = models.TextField()
+    idproff = models.CharField(max_length=200)
+    idtype = models.CharField(max_length=100)
+    contactno = models.BigIntegerField()
+    emer_contactno = models.BigIntegerField()
+    deliverdate = models.DateField()
+    delivertime = models.CharField(max_length=10)
+    deliverymode = models.CharField(max_length=100) 

@@ -71,9 +71,12 @@ def LoginView(request):
 def DashboardView(request):
     user = request.user
     if user.is_authenticated:
-        acc_status = user.status
-        context = {"status": acc_status}
-        return render(request, "dashboard/r_dashboard.html", context)
+        if user.is_receipient:
+            acc_status = user.status
+            context = {"status": acc_status}
+            return render(request, "dashboard/r_dashboard.html", context)
+        else:
+            return HttpResponse("you are not ricipient! bad request!")
     else:
         return redirect("/ricipient/login/")
 
@@ -141,19 +144,32 @@ def InfoView(request):
     else:
         user = request.user
         if user.is_authenticated:
-            user_obj = User.objects.get(email=user.email)
-            print(user_obj)
-            context = {"data": user_obj}
-            return render(request, "dashboard/r_info.html", context)
+            if user.is_receipient:
+                user_obj = User.objects.get(email=user.email)
+                print(user_obj)
+                context = {"data": user_obj}
+                return render(request, "dashboard/r_info.html", context)
+            else:
+                return HttpResponse("bad request!")
         else:
-            # return redirect("/login/")
             return redirect("/ricipient/login/")
 
 
 def LogoutView(request):
     if request.user.is_authenticated:
-        logout(request)
-        return redirect("/")
+        if request.user.is_receipient:
+            logout(request)
+            return redirect("/")
+        else:
+            return HttpResponse("bad request!")
     else:
-        # return redirect("/login/")
         return redirect("/ricipient/login/")
+    
+
+def AddNewBloodRequestView(request):
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        return HttpResponse("data get")
+    else:    
+        return render(request,"dashboard/r_new_blood_request.html")
