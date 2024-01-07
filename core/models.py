@@ -27,3 +27,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+
+class Bloodstock(models.Model):
+    blood_type = models.CharField(max_length=5)
+    quantity = models.IntegerField()

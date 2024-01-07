@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from core.models import User
+from core.models import User, Bloodstock
 
 
 def LoginView(request):
@@ -58,7 +58,7 @@ def DonorRequestView(request):
         else:
             return HttpResponse("not an admin!")
     else:
-        return redirect("login/")
+        return redirect("/bank_admin/")
 
 
 def DonorAccountReview(request):
@@ -92,8 +92,8 @@ def DonorAccountReview(request):
         else:
             return HttpResponse("not an admin!")
     else:
-        return redirect("login/")
-    
+        return redirect("/bank_admin/")
+
 
 def RicipientRequestView(request):
     user = request.user
@@ -101,12 +101,14 @@ def RicipientRequestView(request):
         if user.is_superuser:
             user = User.objects.filter(is_receipient=True, status=False)
             return render(
-                request, "dashboard/ricipients_requests.html", context={"ricipient": user}
+                request,
+                "dashboard/ricipients_requests.html",
+                context={"ricipient": user},
             )
         else:
             return HttpResponse("not an admin!")
     else:
-        return redirect("login/")
+        return redirect("/bank_admin/")
 
 
 def RicipientAccountReview(request):
@@ -140,9 +142,7 @@ def RicipientAccountReview(request):
         else:
             return HttpResponse("not an admin!")
     else:
-        return redirect("login/")    
-
-
+        return redirect("/bank_admin/")
 
 
 def HospitalRequestView(request):
@@ -151,12 +151,14 @@ def HospitalRequestView(request):
         if user.is_superuser:
             user = User.objects.filter(is_hospital_stff=True, status=False)
             return render(
-                request, "dashboard/hospital_staff_requests.html", context={"hospital": user}
+                request,
+                "dashboard/hospital_staff_requests.html",
+                context={"hospital": user},
             )
         else:
             return HttpResponse("not an admin!")
     else:
-        return redirect("login/")
+        return redirect("/bank_admin/")
 
 
 def HospitalAccountReview(request):
@@ -167,7 +169,7 @@ def HospitalAccountReview(request):
             if request.method == "POST":
                 data = request.POST
                 staff_id = data.get("staffid")
-              
+
                 if User.objects.filter(id=staff_id).exists():
                     user = User.objects.get(id=staff_id)
                     try:
@@ -190,4 +192,119 @@ def HospitalAccountReview(request):
         else:
             return HttpResponse("not an admin!")
     else:
-        return redirect("login/")     
+        return redirect("/bank_admin/")
+
+
+def BloodStockView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            stock = Bloodstock.objects.all()
+            return render(
+                request, "dashboard/blood_stock.html", context={"blood": stock}
+            )
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")
+
+
+def AddBloodGroupView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            if request.method == "POST":
+                data = request.POST
+                if Bloodstock.objects.filter(blood_type=data.get("bloodname")).exists():
+                    return HttpResponse("Blood Group Type already exist!")
+                else:
+                    try:
+                        blood_obj = Bloodstock.objects.create(
+                            blood_type=data.get("bloodname"), quantity=False
+                        )
+                        blood_obj.save()
+                    except Exception as e:
+                        print(e)
+                        return HttpResponse("error occured!")
+
+                    stock = Bloodstock.objects.all()
+                    return render(
+                        request, "dashboard/blood_stock.html", context={"blood": stock}
+                    )
+            else:
+                return HttpResponse("bad request!")
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")
+
+
+def EditBloodInfoView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            if request.method == "POST":
+                data = request.POST
+                blood = data.get("blood_group_name")
+                quantity = data.get("quantity")
+
+                try:
+                    if Bloodstock.objects.filter(blood_type=blood).exists():
+                        stock = Bloodstock.objects.get(blood_type=blood)
+
+                        if blood:
+                            stock.blood_type = blood
+                            stock.save()
+                        else:
+                            pass
+
+                        if quantity:
+                            stock.quantity = quantity
+                            stock.save()
+                        else:
+                            pass
+
+                    else:
+                        return HttpResponse("blood group not exist!")
+
+                    stock = Bloodstock.objects.all()
+                    return render(
+                        request, "dashboard/blood_stock.html", context={"blood": stock}
+                    )
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("error occured!")
+
+            else:
+                return HttpResponse("bad request")
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")
+
+
+def DeleteBloodGroupView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            data = request.POST
+            blood_group_id = data.get("bloodid")
+            blood_group_id = int(blood_group_id)
+
+            if Bloodstock.objects.filter(id=blood_group_id).exists():
+                try:
+                    stock = Bloodstock.objects.get(id=blood_group_id)
+                    stock.delete()
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("error occured!")
+            else:
+                return HttpResponse("blood group ID not exist!")
+            stock = Bloodstock.objects.all()
+            return render(
+                request, "dashboard/blood_stock.html", context={"blood": stock}
+            )
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")

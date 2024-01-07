@@ -6,53 +6,56 @@
 
 <title>Dashboard</title>
   
-  <div class="content">
-    <h2>Hospital Staff Accounts</h2>
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-10">
+
+<div class="main">
+  <h2>Hospital Staff New Account Requests</h2>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
 
 
-          <br>
-          <br>
+      <br>
+      <br>
 
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">STAFF ID</th>
-                    <th scope="col">FULL NAME</th>
-                    <th scope="col">PHONE</th>
-                    <th scope="col">ADDRESS</th>
-                    <th scope="col">EMAIL</th>
-                    <th scope="col">BLOOD GROUP</th>
-                    <th scope="col">APPROVED STATUS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {% for x in hospital %}
-                  <tr>
-                    <th scope="row">{{x.id}}</th>
-                    <td>{{x.first_name}} {{x.last_name}}</td>
-                    <td>{{x.phone}}</td>
-                    <td>{{x.address}}</td>
-                    <td>{{x.email}}</td>
-                    <td>{{x.blood_group}}</td>
-                    <td> 
-                      <form action="{% url 'approve_staff' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="staffid" value="{{x.id}}" required>
-                        <button type="submit" class="btn btn-success">ACCEPT</button>
-                      </form>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">STAFF ID</th>
+                <th scope="col">FULL NAME</th>
+                <th scope="col">PHONE</th>
+                <th scope="col">ADDRESS</th>
+                <th scope="col">EMAIL</th>
+                <th scope="col">BLOOD GROUP</th>
+                <th scope="col">APPROVED STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for x in hospital %}
+              <tr>
+                <th scope="row">{{x.id}}</th>
+                <td>{{x.first_name}} {{x.last_name}}</td>
+                <td>{{x.phone}}</td>
+                <td>{{x.address}}</td>
+                <td>{{x.email}}</td>
+                <td>{{x.blood_group}}</td>
+                <td> 
+                  <form action="{% url 'approve_staff' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="staffid" value="{{x.id}}" required>
+                    <button type="submit" class="btn btn-success">ACCEPT</button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
 
-        </div>
-        <div class="col-1"></div>
     </div>
-    </div>
+    <div class="col-1"></div>
+</div>
+</div>
+
+
 
 
 {% endblock %}

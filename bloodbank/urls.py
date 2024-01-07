@@ -13,4 +13,9 @@ urlpatterns = [
 
     path("hospital_requets/",HospitalRequestView,name="hospital_new_requests"),
     path("hospital_ricipient_acc",HospitalAccountReview,name="approve_staff"),
+
+    path("blood_stock",BloodStockView,name="blood_stock"),
+    path("add_blood_group/",AddBloodGroupView,name="blood_group"),
+    path("editbloodinfo/",EditBloodInfoView,name="editBloodInfo"),
+    path("deletebloodgroup/",DeleteBloodGroupView,name="deletebloodgroup"),
 ]
