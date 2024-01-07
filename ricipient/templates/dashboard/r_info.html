@@ -1,6 +1,8 @@
-{% extends "base_donor.html" %}
+{% extends "base_ricipient.html" %}
 
 {% block sidebar %}
+
+<title>Ricipient Info Update</title>
 
 <div class="content">
     <h2>Account Details</h2>
@@ -34,7 +36,7 @@
                 {{data.address}}
             </textarea>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label class="form-label" for="blood_group">Select Blood Group</label>
             <select name="blood_group" id="blood_group" class="form-select" aria-label="select blood group"
             >
@@ -49,7 +51,7 @@
                 <option value="O+" {% if data.blood_group == 'O+' %} selected {% endif %}>O+</option>
                 <option value="O-" {% if data.blood_group == 'O-' %} selected {% endif %}>O-</option>
             </select>
-        </div>
+        </div> -->
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
 

@@ -3,9 +3,10 @@ from .views import *
 
 urlpatterns = [
     path("",RegisterView),
-    path("login/",LoginView,name="login"),
-    path("dashboard/",DashboardView,name="dashboard"),
-    path("info/",InfoView,name="info"),
-    path("logout/",LogoutView,name="logout"),
-    path("new_blood_request/",AddNewBloodRequestView,name="addnewbloodreq"),
+    path("r_login/",LoginView,name="r_login"),
+    path("r_dashboard/",DashboardView,name="r_dashboard"),
+    path("r_info/",InfoView,name="r_info"),
+    path("r_logout/",LogoutView,name="r_logout"),
+    path("r_new_blood_request/",AddNewBloodRequestView,name="r_addnewbloodreq"),
+    path("r_trackallreq/",TrackAllRequestView,name="r_trackallreq"),
 ]

@@ -51,4 +51,5 @@ class Order(models.Model):
     emer_contactno = models.BigIntegerField()
     deliverdate = models.DateField()
     delivertime = models.CharField(max_length=10)
-    deliverymode = models.CharField(max_length=100) 
+    deliverymode = models.CharField(max_length=100)
+    status = models.BooleanField(default=False) 

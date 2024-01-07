@@ -49,7 +49,7 @@ def LoginView(request):
         if auth:
             if phone == user.phone:
                 login(request, user)
-                return redirect("/ricipient/dashboard/")
+                return redirect("/ricipient/r_dashboard/")
             else:
                 return HttpResponse("phone number not match! Please enter correct one!")
         else:
@@ -78,7 +78,7 @@ def DashboardView(request):
         else:
             return HttpResponse("you are not ricipient! bad request!")
     else:
-        return redirect("/ricipient/login/")
+        return redirect("/ricipient/r_login/")
 
 
 def InfoView(request):
@@ -140,7 +140,7 @@ def InfoView(request):
         else:
             pass
 
-        return redirect("/ricipient/login/")
+        return redirect("/ricipient/r_login/")
     else:
         user = request.user
         if user.is_authenticated:
@@ -152,7 +152,7 @@ def InfoView(request):
             else:
                 return HttpResponse("bad request!")
         else:
-            return redirect("/ricipient/login/")
+            return redirect("/ricipient/r_login/")
 
 
 def LogoutView(request):
@@ -163,13 +163,65 @@ def LogoutView(request):
         else:
             return HttpResponse("bad request!")
     else:
-        return redirect("/ricipient/login/")
+        return redirect("/ricipient/r_login/")
     
 
 def AddNewBloodRequestView(request):
     if request.method == "POST":
         data = request.POST
-        print(data)
-        return HttpResponse("data get")
-    else:    
-        return render(request,"dashboard/r_new_blood_request.html")
+        
+        if request.user.is_receipient:
+            if request.user.status:
+                blood = data.get('blood_group')
+                try:
+                    bloodgrpid = Bloodstock.objects.get(id=blood)
+                    order = Order(
+                        userid = User.objects.get(id=request.user.id),
+                        name=data.get('full_name'),
+                        email=data.get('email'),
+                        age=data.get('age'),
+                        bloodgroup=bloodgrpid,  # Assuming 'blood_group' is the ID of the selected blood group
+                        quantity=data.get('quantity'),
+                        address=data.get('address'),
+                        idproff=data.get('government_id'),
+                        idtype=data.get('profession_type'),
+                        contactno=data.get('contact_number'),
+                        emer_contactno=data.get('emergency_contact'),
+                        deliverdate=data.get('delivery_date'),
+                        delivertime=data.get('delivery_time'),
+                        deliverymode=data.get('delivery_mode'),
+                        status=False,
+                    )
+                    order.save()
+                    return redirect("/ricipient/r_trackallreq/")
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("error occured!")
+            else:
+                return HttpResponse("Your account is not active!")
+        else:
+            return HttpResponse("bad request")
+
+    else:
+        stock = Bloodstock.objects.all()    
+        return render(request,"dashboard/r_new_blood_request.html",context={"blood":stock})
+
+
+def TrackAllRequestView(request):
+    if request.user.is_authenticated:
+        if request.user.is_receipient:
+            if request.user.status:
+                user = request.user
+                try:
+                    user_obj = User.objects.get(id=user.id)
+                    order = Order.objects.filter(userid=user_obj)
+                    return render(request,"dashboard/r_orders.html",context={"order":order})
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("error occured!")
+            else:
+                return HttpResponse("Your account is not approved! Please wait for confirmation!")
+        else:
+            return HttpResponse("bad request!")
+    else:
+        return redirect("/ricipient/r_login/")

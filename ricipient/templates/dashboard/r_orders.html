@@ -1,0 +1,52 @@
+{% extends "base_ricipient.html" %}
+
+{% block sidebar %}
+
+<br>
+
+<title>Order Status ~ Ricipient</title>
+  
+  <div class="content">
+    <h2>Order Status</h2>
+    <br>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ORDER ID</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">EMEGENCY CONTACT NO</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">ORDER ADDRES</th>
+                    <th scope="col">ORDER MODE</th>
+                    <th scope="col">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for x in order %}
+                  <tr>
+                    <th scope="row">{{x.id}}</th>
+                    <td>{{x.name}}</td>
+                    <td>{{x.emer_contactno}}</td>
+                    <td>{{x.email}}</td>
+                    <td>{{x.address}}</td>
+                    <td>{{x.deliverymode}}</td>
+                    <td>
+                    {% if not x.status %}  <font style="color: rgb(39, 1, 39);"><b>Waiting for Approval</b></font> {% endif %}
+                    {% if x.status %}   <font style="color: green;"><b>Granted</b></font> {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+   </div>
+
+
+{% endblock %}

@@ -95,7 +95,7 @@ def InfoView(request):
         lastname = data.get("last_name")
         email = data.get("email")
         password = data.get("password")
-        blood_group = data.get("blood_group")
+        bloodgrpid = data.get("blood_group")
         phone = data.get("phone")
         address = data.get("address")
 
@@ -139,9 +139,14 @@ def InfoView(request):
         else:
             pass
 
-        if blood_group:
-            user.blood_group = blood_group
-            user.save()
+        if bloodgrpid:
+            if Bloodstock.objects.filter(id=bloodgrpid).exists():
+                stock_obj = Bloodstock.objects.get(id=bloodgrpid)
+                user.blood_group = stock_obj
+                user.save()
+            else:
+                pass
+            
         else:
             pass
         return redirect("/donor/d_login/")
@@ -150,8 +155,8 @@ def InfoView(request):
         if user.is_authenticated:
             if user.is_donor:
                 user_obj = User.objects.get(email=user.email)
-                print(user_obj)
-                context = {"data": user_obj}
+                stock = Bloodstock.objects.all()
+                context = {"data": user_obj,"stock":stock}
                 return render(request, "dashboard/info.html", context)
             else:
                 return HttpResponse("bad request")
