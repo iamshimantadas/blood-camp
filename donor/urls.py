@@ -3,8 +3,8 @@ from .views import *
 
 urlpatterns = [
     path("",RegisterView),
-    path("login/",LoginView,name="login"),
-    path("dashboard/",DashboardView,name="dashboard"),
-    path("info/",InfoView,name="info"),
-    path("logout/",LogoutView,name="logout"),
+    path("d_login/",LoginView,name="d_login"),
+    path("d_dashboard/",DashboardView,name="d_dashboard"),
+    path("d_info/",InfoView,name="d_info"),
+    path("d_logout/",LogoutView,name="d_logout"),
 ]

@@ -53,7 +53,7 @@ def LoginView(request):
         if auth:
             if phone == user.phone:
                 login(request, user)
-                return redirect("dashboard/")
+                return redirect("/donor/d_dashboard/")
             else:
                 return HttpResponse("phone number not match! Please enter correct one!")
         else:
@@ -84,7 +84,7 @@ def DashboardView(request):
             else:
                 return render(request, "login.html")
     else:
-        return redirect("/donor/login/")
+        return redirect("/donor/d_login/")
 
 
 def InfoView(request):
@@ -144,7 +144,7 @@ def InfoView(request):
             user.save()
         else:
             pass
-        return redirect("/login/")
+        return redirect("/donor/d_login/")
     else:
         user = request.user
         if user.is_authenticated:
@@ -156,7 +156,7 @@ def InfoView(request):
             else:
                 return HttpResponse("bad request")
         else:
-            return redirect("/login/")
+            return redirect("/donor/d_login/")
 
 
 def LogoutView(request):
@@ -164,8 +164,8 @@ def LogoutView(request):
     if request.user.is_authenticated:
         if user.is_donor:
             logout(request)
-            return redirect("/")
+            return redirect("/donor/d_login/")
         else:
             return HttpResponse("you are a donor!")
     else:
-        return redirect("/login/")
+        return redirect("/donor/d_login/")
