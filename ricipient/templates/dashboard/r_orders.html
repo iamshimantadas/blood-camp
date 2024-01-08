@@ -40,7 +40,18 @@
                     <td>{{x.quantity}}</td>
                     <td>
                     {% if not x.status %}  <font style="color: rgb(39, 1, 39);"><b>Waiting for Approval</b></font> {% endif %}
-                    {% if x.status %}   <font style="color: green;"><b>Granted</b></font> {% endif %}
+                    {% if x.status %} 
+                      <font style="color: green;"><b>Granted</b></font> 
+                      <br><br>
+                    {% if x.deliverymode == "offline" %}
+                    <form action="{% url 'r_offlinedelivery' %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="orderid" value="{{x.id}}" required>
+                      <button>delivery details</button>
+                    </form>
+                    {% endif %}
+
+                    {% endif %}
                     </td>
                   </tr>
                 {% endfor %}

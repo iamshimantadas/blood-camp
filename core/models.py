@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from datetime import datetime
 from .manager import *
 
 class Bloodstock(models.Model):
@@ -49,6 +50,7 @@ class Order(models.Model):
     idtype = models.CharField(max_length=100)
     contactno = models.BigIntegerField()
     emer_contactno = models.BigIntegerField()
+    orderdate = models.DateTimeField(default=datetime.now, null=True)
     deliverdate = models.DateField()
     delivertime = models.CharField(max_length=10)
     deliverymode = models.CharField(max_length=100)
@@ -60,3 +62,11 @@ class Blooddonation(models.Model):
     donate_date = models.DateField()
     donate_time = models.CharField(max_length=10)
     disease = models.TextField(null=True)
+
+class Offlinedelivery(models.Model):
+    delivery_date = models.DateField()
+    delivery_time = models.TimeField()
+    delivery_address = models.TextField()
+    message = models.TextField()
+    orderid = models.ForeignKey(Order, on_delete=models.CASCADE)
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)    

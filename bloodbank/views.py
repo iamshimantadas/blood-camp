@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from core.models import User, Bloodstock
+from core.models import User, Bloodstock, Order, Offlinedelivery
 
 
 def LoginView(request):
@@ -308,3 +308,90 @@ def DeleteBloodGroupView(request):
             return redirect("/bank_admin/")
     else:
         return redirect("/bank_admin/")
+    
+
+
+def RicipientBloodReqView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            order = Order.objects.all()
+            return render(request,"dashboard/allorders.html",context={"order":order})
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")
+    
+def OrderDetailView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            if request.method == 'POST':
+                order_id = request.POST.get("orderid")
+                try:
+                    order = Order.objects.get(id=order_id)
+                    return render(request, "dashboard/order_detail.html", context={"order": order})
+                except Order.DoesNotExist:
+                    return HttpResponse("Order ID does not exist!")
+            else:
+                return HttpResponse("Invalid request method!")
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")
+    
+def ConfirmOrderView(request):
+    user = request.user
+    if user.is_authenticated:
+        if user.is_superuser:
+            if request.method == 'POST':
+                confirm_delivery_date = request.POST.get('confirmDeliveryDate')
+                confirm_delivery_time = request.POST.get('confirmDeliveryTime')
+                confirm_delivery_address = request.POST.get('confirmDeliveryAddress')
+                important_message = request.POST.get('importantMessage')
+                orderid = request.POST.get("orderid")
+                userid = request.POST.get("userid")
+
+                order_obj = Order.objects.get(id=orderid)
+                user_obj = User.objects.get(id=userid)
+
+                try:
+                    offline_delivery = Offlinedelivery(
+                    delivery_date=confirm_delivery_date,
+                    delivery_time=confirm_delivery_time,
+                    delivery_address=confirm_delivery_address,
+                    message=important_message,
+                    orderid=order_obj,
+                    userid=user_obj
+                    )
+                    offline_delivery.save()
+
+                    try:
+                        stock = Bloodstock.objects.get(blood_type=order_obj.bloodgroup)
+                        stock.quantity = stock.quantity - order_obj.quantity
+                        stock.save()
+                    except Exception as e:
+                        print(e)
+                        return HttpResponse("error occured!")
+
+                    try:
+                        order_obj = Order.objects.get(id=orderid)
+                        order_obj.status = True
+                        order_obj.save()
+                    except Exception as e:
+                        print(e)
+                        return HttpResponse("error occured!")     
+
+                    return redirect("/bank_admin/ricipientsblood/")
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("error occured!")    
+                
+                # return HttpResponse("got it")
+
+            else:
+                return HttpResponse("Invalid request method!")
+        else:
+            return redirect("/bank_admin/")
+    else:
+        return redirect("/bank_admin/")    

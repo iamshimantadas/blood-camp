@@ -1,0 +1,45 @@
+{% extends "base_ricipient.html" %}
+
+{% block sidebar %}
+
+<br>
+
+<title>Offline Delivery Confirmation ~ Ricipient</title>
+  
+  <div class="content">
+    <h2>Offline Delivery</h2>
+    <br>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">DELIVERY ID</th>
+                    <th scope="col">DATE</th>
+                    <th scope="col">TIME</th>
+                    <th scope="col">ADDRESS</th>
+                    <th scope="col">MESSAGE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                  <tr>
+                    <th scope="row">{{delivery.id}}</th>
+                    <td>{{delivery.delivery_date}}</td>
+                    <td>{{delivery.delivery_time}}</td>
+                    <td>{{delivery.delivery_address}}</td>
+                    <td>{{delivery.message}}</td>
+                  </tr>
+              
+                </tbody>
+              </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+  </div>
+
+
+{% endblock %}

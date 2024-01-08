@@ -1,0 +1,179 @@
+{% extends "base_bank.html" %}
+
+{% block bank_sidebar %}
+
+<title>Order Details</title>
+<br>
+
+<div class="main">
+  <h2>Order Detail {{user}} </h2>
+  <br>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Field</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>User ID</td>
+                    <td>{{ order.userid }}</td>
+                  </tr>
+                  <tr>
+                    <td>Name</td>
+                    <td>{{ order.name }}</td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td>{{ order.email }}</td>
+                  </tr>
+                  <tr>
+                    <td>Age</td>
+                    <td>{{ order.age }}</td>
+                  </tr>
+                  <tr>
+                    <td>Blood Group</td>
+                    <td>{{ order.bloodgroup }}</td>
+                  </tr>
+                  <tr>
+                    <td>Quantity</td>
+                    <td>{{ order.quantity }}</td>
+                  </tr>
+                  <tr>
+                    <td>Address</td>
+                    <td>{{ order.address }}</td>
+                  </tr>
+                  <tr>
+                    <td>ID Proof</td>
+                    <td>{{ order.idproff }}</td>
+                  </tr>
+                  <tr>
+                    <td>ID Type</td>
+                    <td>{{ order.idtype }}</td>
+                  </tr>
+                  <tr>
+                    <td>Contact Number</td>
+                    <td>{{ order.contactno }}</td>
+                  </tr>
+                  <tr>
+                    <td>Emergency Contact Number</td>
+                    <td>{{ order.emer_contactno }}</td>
+                  </tr>
+                  <tr>
+                    <td>Order Date</td>
+                    <td>{{ order.orderdate }}</td>
+                  </tr>
+                  <tr>
+                    <td>Expected Delivery Date</td>
+                    <td><b>{{ order.deliverdate }}</b></td>
+                  </tr>
+                  <tr>
+                    <td>Expected Delivery Time</td>
+                    <td><b>{{ order.delivertime }}</b></td>
+                  </tr>
+                  <tr>
+                    <td>Delivery Mode</td>
+                    <td>{{ order.deliverymode }}</td>
+                  </tr>
+                  <tr>
+                    <td>Order Status</td>
+                    <td>
+                        {% if order.status %}
+                        <font style="color: green;"><b>Confirmed</b></font>
+                        {% else %}
+                        <font style="color: red;"><b>Not Confirm!</b></font>
+                        {% endif %}
+                    </td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+
+              {% if order.deliverymode == "offline" %}
+              <br>
+    
+                <hr>
+                <b><h4>Enter Offline Order Details</h4></b>
+
+
+                <form method="post" action="{% url 'confirm_order' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="orderid" value="{{ order.id }}" required>
+                    <input type="hidden" name="userid" value="{{ order.userid.id }}" required>
+
+                    <div class="form-group row">
+                        <label for="confirmDeliveryDate" class="col-sm-2 col-form-label">Confirm Delivery Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="confirmDeliveryDate" id="confirmDeliveryDate" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="confirmDeliveryTime" class="col-sm-2 col-form-label">Confirm Delivery Time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" name="confirmDeliveryTime" id="confirmDeliveryTime" required >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="confirmDeliveryAddress" class="col-sm-2 col-form-label">Confirm Delivery Address</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="confirmDeliveryAddress" id="confirmDeliveryAddress" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row">
+                        <label for="importantMessage" class="col-sm-2 col-form-label">Important Message</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="importantMessage" id="importantMessage" rows="3"></textarea>
+                        </div>
+                    </div>
+               <br>
+                    <button type="submit" class="btn btn-success">CONFIRM</button>
+                </form>
+
+                <br>
+                <br>
+                <br>
+
+
+                <form method="post" action="">
+                    <input type="hidden" name="orderid" required>
+                    <button class="btn btn-danger">CANCEL</button>
+                </form>
+
+                {% else %}
+                <br>
+                <hr>
+                <div class="row">
+                    <div class="col-5">
+                        <form action="" method="post">
+                            <input type="hidden" name="orderid" value="" required>
+                            <button type="submit" class="btn btn-success">CONFIRM</button>
+                        </form>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <form action="" method="post">
+                            <input type="hidden" name="orderid" value="" required>
+                            <button type="submit" class="btn btn-danger">CANCEL</button>
+                        </form>
+                    </div>
+                </div>
+               
+
+                
+
+            {% endif %}
+
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+
+{% endblock %}

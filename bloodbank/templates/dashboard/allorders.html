@@ -1,0 +1,57 @@
+{% extends "base_bank.html" %}
+
+{% block bank_sidebar %}
+
+<title>All Blood Orders</title>
+<br>
+
+<div class="main">
+  <h2>Blood Orders</h2>
+  <br>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ORDER ID</th>
+                    <th scope="col">ORDER USER</th>
+                    <th scope="col">PATIENT</th>
+                    <th scope="col">ORDER DATE</th>
+                    <th scope="col">DELIVERY DATE</th>
+                    <th scope="col">DELIVERY TIME</th>
+                    <th scope="col">DELIVERY MODE</th>
+                    <th scope="col">DETAIL</th>
+                    <th scope="col">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for x in order %}
+                  <tr>
+                    <th scope="row">{{x.id}}</th>
+                    <td>{{x.userid.first_name}} {{x.userid.last_name}}</td>
+                    <td>{{x.name}}</td>
+                    <td>{{x.orderdate}}</td>
+                    <td>{{x.deliverdate}}</td>
+                    <td>{{x.delivertime}}</td>
+                    <td>{{x.deliverymode}}</td>
+                    <td>
+                        <form action="{% url 'order_detail' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{x.id}}" name="orderid" required>
+                            <button type="submit" class="btn btn-dark">Detail</button>
+                        </form>
+                    </td>
+                    <td>{% if x.status %} <font style="color: green;"><b>Approved</b></font> {% else %} <font style="color: red;"><b>Waiting</b></font> {% endif %}</td>
+                  </tr>
+                 {% endfor %}
+                </tbody>
+              </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+
+{% endblock %}

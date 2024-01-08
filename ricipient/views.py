@@ -43,17 +43,22 @@ def LoginView(request):
         data = request.POST
         phone = data.get("phone")
         phone = int(phone)
-        user = User.objects.get(email=data.get("email"))
-        auth = authenticate(email=data.get("email"), password=data.get("password"))
-        
-        if auth:
-            if phone == user.phone:
-                login(request, user)
-                return redirect("/ricipient/r_dashboard/")
+        try:
+            user = User.objects.get(email=data.get("email"))
+            auth = authenticate(email=data.get("email"), password=data.get("password"))
+            
+            if auth:
+                if phone == user.phone:
+                    login(request, user)
+                    return redirect("/ricipient/r_dashboard/")
+                else:
+                    return HttpResponse("phone number not match! Please enter correct one!")
             else:
-                return HttpResponse("phone number not match! Please enter correct one!")
-        else:
-            return HttpResponse("please enter right credentials!")
+                return HttpResponse("please enter right credentials!")
+        except Exception as e:
+            print(e)
+            return HttpResponse("error occured!")
+            
     else:
         user = request.user
         if user.is_authenticated:
@@ -267,3 +272,31 @@ def TrackAllRequestView(request):
             return HttpResponse("bad request!")
     else:
         return redirect("/ricipient/r_login/")
+    
+def OfflineDeliveryTrack(request):
+    if request.user.is_authenticated:
+        if request.user.is_receipient:
+            if request.user.status:
+                if request.method  == "POST":
+                    data = request.POST
+                    orderid = data.get("orderid")
+                    try:
+                        order_obj = Order.objects.get(id=orderid)
+                        if order_obj.status:
+                            delivery = Offlinedelivery.objects.get(orderid=order_obj)
+                            
+                            return render(request,"dashboard/r_delivery_detail.html",context={"delivery":delivery})
+                        else:
+                            return HttpResponse("order not confirmed by admin!")
+                    except Exception as e:
+                        print(e)
+                        return HttpResponse("error occured")
+                        
+                else:
+                    return HttpResponse("bad request")
+            else:
+                return HttpResponse("Your account is not approved! Please wait for confirmation!")
+        else:
+            return HttpResponse("bad request!")
+    else:
+        return redirect("/ricipient/r_login/")    

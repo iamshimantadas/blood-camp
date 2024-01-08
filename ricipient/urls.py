@@ -9,4 +9,5 @@ urlpatterns = [
     path("r_logout/",LogoutView,name="r_logout"),
     path("r_new_blood_request/",AddNewBloodRequestView,name="r_addnewbloodreq"),
     path("r_trackallreq/",TrackAllRequestView,name="r_trackallreq"),
+    path("r_offlinedelivery/",OfflineDeliveryTrack,name="r_offlinedelivery"),
 ]

@@ -18,4 +18,8 @@ urlpatterns = [
     path("add_blood_group/",AddBloodGroupView,name="blood_group"),
     path("editbloodinfo/",EditBloodInfoView,name="editBloodInfo"),
     path("deletebloodgroup/",DeleteBloodGroupView,name="deletebloodgroup"),
+
+    path("ricipientsblood/",RicipientBloodReqView,name="ricipients_blood_req"),
+    path("orderdetail/",OrderDetailView,name="order_detail"),
+    path("confirmorder/",ConfirmOrderView,name="confirm_order"),
 ]
