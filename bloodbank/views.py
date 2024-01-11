@@ -352,10 +352,16 @@ def ConfirmOrderView(request):
                 orderid = request.POST.get("orderid")
                 userid = request.POST.get("userid")
 
-                order_obj = Order.objects.get(id=orderid)
-                user_obj = User.objects.get(id=userid)
+                # print(request.POST)
+
+                # if confirm_delivery_date < order_obj.delivery_date or \
+                #         (confirm_delivery_time < order_obj.delivery_time):
+                #     return HttpResponse("Invalid delivery date or time. Please choose a valid date and time.")
 
                 try:
+                    order_obj = Order.objects.get(id=orderid)
+                    user_obj = User.objects.get(id=userid)
+
                     offline_delivery = Offlinedelivery(
                     delivery_date=confirm_delivery_date,
                     delivery_time=confirm_delivery_time,
@@ -387,7 +393,7 @@ def ConfirmOrderView(request):
                     print(e)
                     return HttpResponse("error occured!")    
                 
-                # return HttpResponse("got it")
+                return HttpResponse("got it")
 
             else:
                 return HttpResponse("Invalid request method!")
@@ -395,3 +401,31 @@ def ConfirmOrderView(request):
             return redirect("/bank_admin/")
     else:
         return redirect("/bank_admin/")    
+    
+
+def CancelOrder(request):
+    if request.method == "POST":
+        data = request.POST
+        id = data.get("orderid")
+        
+        if Order.objects.filter(id=id).exists():
+            try:
+                order = Order.objects.get(id=id)
+                order.status = False
+                order.save()
+
+                order_obj = Order.objects.get(id=id)
+                stock = Bloodstock.objects.get(blood_type=order_obj.bloodgroup)
+                stock.quantity = stock.quantity - order_obj.quantity
+                stock.save()
+                
+                return redirect("/bank_admin/")    
+            except Exception as e:
+                print(e)
+                return HttpResponse("error occured!")  
+        else:
+            return HttpResponse("order id not exist!")
+
+        # return HttpResponse("order canceled!")
+    else:
+        return HttpResponse("error occured! bad request!")

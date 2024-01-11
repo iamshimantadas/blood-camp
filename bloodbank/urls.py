@@ -22,4 +22,5 @@ urlpatterns = [
     path("ricipientsblood/",RicipientBloodReqView,name="ricipients_blood_req"),
     path("orderdetail/",OrderDetailView,name="order_detail"),
     path("confirmorder/",ConfirmOrderView,name="confirm_order"),
+    path("cancelorder/",CancelOrder,name="cancel_order"),
 ]

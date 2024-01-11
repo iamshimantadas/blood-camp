@@ -101,7 +101,7 @@
                 <hr>
                 <b><h4>Enter Offline Order Details</h4></b>
 
-
+                <!-- offline order confirm -->
                 <form method="post" action="{% url 'confirm_order' %}">
                     {% csrf_token %}
                     <input type="hidden" name="orderid" value="{{ order.id }}" required>
@@ -140,9 +140,10 @@
                 <br>
                 <br>
 
-
-                <form method="post" action="">
-                    <input type="hidden" name="orderid" required>
+                <!-- offline order cancel -->
+                <form method="post" action="{% url 'cancel_order' %}">
+                  {% csrf_token %}
+                    <input type="hidden" value="{{ order.id }}" name="orderid" required>
                     <button class="btn btn-danger">CANCEL</button>
                 </form>
 

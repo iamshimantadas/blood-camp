@@ -274,29 +274,64 @@ def TrackAllRequestView(request):
         return redirect("/ricipient/r_login/")
     
 def OfflineDeliveryTrack(request):
+    # if request.user.is_authenticated:
+    #     if request.user.is_receipient:
+    #         if request.user.status:
+    #             if request.method  == "POST":
+    #                 data = request.POST
+    #                 orderid = data.get("orderid")
+    #                 try:
+    #                     order_obj = Order.objects.filter(id=orderid).last()
+    #                     print(order_obj)
+    #                     if order_obj.status:
+    #                         delivery = Offlinedelivery.objects.get(orderid=order_obj)
+    #                         print(delivery)
+    #                         return render(request,"dashboard/r_delivery_detail.html",context={"delivery":delivery})
+    #                     else:
+    #                         return HttpResponse("order not confirmed by admin!")
+    #                 except Exception as e:
+    #                     print(e)
+    #                     return HttpResponse("error occured")
+                        
+    #             else:
+    #                 return HttpResponse("bad request")
+    #         else:
+    #             return HttpResponse("Your account is not approved! Please wait for confirmation!")
+    #     else:
+    #         return HttpResponse("bad request!")
+    # else:
+    #     return redirect("/ricipient/r_login/")
+
     if request.user.is_authenticated:
         if request.user.is_receipient:
             if request.user.status:
-                if request.method  == "POST":
+                if request.method == "POST":
                     data = request.POST
                     orderid = data.get("orderid")
                     try:
-                        order_obj = Order.objects.get(id=orderid)
+                        order_obj = Order.objects.filter(id=orderid).last()
+                        print(order_obj)
                         if order_obj.status:
-                            delivery = Offlinedelivery.objects.get(orderid=order_obj)
-                            
-                            return render(request,"dashboard/r_delivery_detail.html",context={"delivery":delivery})
+                            # Use filter instead of get to handle multiple objects
+                            deliveries = Offlinedelivery.objects.filter(orderid=order_obj)
+                            print(deliveries)
+
+                            if deliveries.exists():
+                                # Choose the delivery you want to display
+                                delivery = deliveries.last()
+                                return render(request, "dashboard/r_delivery_detail.html", context={"delivery": delivery})
+                            else:
+                                return HttpResponse("No delivery found for the given order!")
                         else:
-                            return HttpResponse("order not confirmed by admin!")
+                            return HttpResponse("Order not confirmed by admin!")
                     except Exception as e:
                         print(e)
-                        return HttpResponse("error occured")
-                        
+                        return HttpResponse("Error occurred")
                 else:
-                    return HttpResponse("bad request")
+                    return HttpResponse("Bad request")
             else:
                 return HttpResponse("Your account is not approved! Please wait for confirmation!")
         else:
-            return HttpResponse("bad request!")
+            return HttpResponse("Bad request!")
     else:
         return redirect("/ricipient/r_login/")    
